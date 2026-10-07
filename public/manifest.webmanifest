@@ -1,0 +1,13 @@
+{
+  "name": "Kiray: homes and everything around them",
+  "short_name": "Kiray",
+  "description": "House rentals and neighbourhood services across Ethiopia.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#FBFAF7",
+  "theme_color": "#1D6F52",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

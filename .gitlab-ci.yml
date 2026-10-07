@@ -1,0 +1,41 @@
+# Kiray CI: install, type-check and build on every push and merge request.
+# Node 22 is required: the local SQLite fallback uses the built-in node:sqlite.
+image: node:22-bookworm
+
+stages:
+  - verify
+  - build
+
+variables:
+  npm_config_cache: "$CI_PROJECT_DIR/.npm"
+  NEXT_TELEMETRY_DISABLED: "1"
+
+cache:
+  key:
+    files:
+      - package-lock.json
+  paths:
+    - .npm/
+
+before_script:
+  - npm ci --no-audit --no-fund
+
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS
+      when: never
+    - if: $CI_COMMIT_BRANCH
+
+typecheck:
+  stage: verify
+  script:
+    - npm run typecheck
+  # next.config.mjs ignores type errors during builds; surface them here
+  # without blocking until the codebase is fully clean.
+  allow_failure: true
+
+build:
+  stage: build
+  script:
+    - npm run build
